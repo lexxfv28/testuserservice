@@ -1,0 +1,12 @@
+server:
+  port: 2222
+
+#configuracion de MongoBD
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: search
+      password: password
+      database: test
