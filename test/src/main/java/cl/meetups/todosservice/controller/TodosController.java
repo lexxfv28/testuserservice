@@ -27,7 +27,7 @@ public class TodosController {
 	@Autowired
 	TodosRepository todosRepository;
 	
-	@GetMapping("/todos/todos/{id}")
+	@GetMapping("/todos/{id}")
     public ResponseEntity getTodo(@PathVariable String id) {
         ResponseEntity response = null;
         Optional todo = this.todosRepository.findById(id);
@@ -39,7 +39,7 @@ public class TodosController {
         return response;
     }
 	
-	@GetMapping("/todos/todos/")
+	@GetMapping("/todos/")
     public ResponseEntity getTodos() {
         ResponseEntity response = null;
         List<Todo> todos = this.todosRepository.findAll();
@@ -51,7 +51,7 @@ public class TodosController {
         return response;
     }
 	
-	@DeleteMapping("/todos/todos/{id}")
+	@DeleteMapping("/todos/{id}")
     public ResponseEntity deleteTodo(@PathVariable String id) {
         ResponseEntity response = null;
         try {
@@ -66,7 +66,7 @@ public class TodosController {
         return response;
     }
 
-	@PutMapping("/todos/todos/{id}")
+	@PutMapping("/todos/{id}")
     public ResponseEntity putTodo(@PathVariable ObjectId id, @Valid @RequestBody Todo todo) {
         ResponseEntity response = null;
         try {
@@ -82,7 +82,7 @@ public class TodosController {
         return response;
     }
 	
-	@PostMapping("/todos/todos/")
+	@PostMapping("/todos/")
     public ResponseEntity crearTodo(@Valid @RequestBody Todo todo) {
         ResponseEntity response = null;
         try {

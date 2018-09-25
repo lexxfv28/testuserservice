@@ -28,7 +28,7 @@ public class UsersController {
 	@Autowired
 	TodosRepository todosRepository;
 
-	@GetMapping("/todos/todos/{idT}/user/{idU}")
+	@GetMapping("/todos/{idT}/user/{idU}")
     public ResponseEntity getUser(@PathVariable String idT, @PathVariable int idU) {
         ResponseEntity response = null;
         User user = this.todosRepository.findById(idT).get().getUsuarios().get(idU);
@@ -41,7 +41,7 @@ public class UsersController {
         return response;
     }
 	
-	@GetMapping("/todos/todos/{idT}/user/")
+	@GetMapping("/todos/{idT}/user/")
     public ResponseEntity getUsers(@PathVariable String idT) {
         ResponseEntity response = null;
         List<User> users = this.todosRepository.findById(idT).get().getUsuarios();
@@ -53,28 +53,32 @@ public class UsersController {
         return response;
     }
 	
-	@DeleteMapping("/todos/todos/{idT}/user/{idU}")
+	@DeleteMapping("/todos/{idT}/user/{idU}")
     public ResponseEntity deleteUser(@PathVariable String idT, @PathVariable int idU) {
         ResponseEntity response = null;
         try {
-        	this.todosRepository.findById(idT).get().getUsuarios().remove(idU);
-        	//this.todosRepository.delete(this.todosRepository.findById(idT).get().getUsuarios().get(idU));
-        	//this.todosRepository.findById(idT).get().
-        	response = new ResponseEntity(HttpStatus.NO_CONTENT);
+       	
+        	Todo todo = this.todosRepository.findById(idT).get();
+        	todo.getUsuarios().remove(idU);
+        	
+        	this.todosRepository.save(todo);
+
+        	response = new ResponseEntity(HttpStatus.OK);
         }
         catch (IllegalArgumentException e)
         {
-        	response = ResponseEntity.noContent().build();
+        	response = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
 
         return response;
     }
 
-	@PutMapping("/todos/todos/{idT}/user/{idU}")
-    public ResponseEntity putUser(@PathVariable ObjectId id, @Valid @RequestBody Todo todo) {
+	@PutMapping("/todos/{idT}/user/{idU}")
+    public ResponseEntity putUser(@PathVariable String idT , @PathVariable int idU, @Valid @RequestBody User user) {
         ResponseEntity response = null;
         try {
-        	todo.set_id(id);
+        	Todo todo = this.todosRepository.findById(idT).get();
+        	todo.getUsuarios().set(idU, user);
         	this.todosRepository.save(todo);
         	response = new ResponseEntity(HttpStatus.OK);
         }
@@ -86,13 +90,14 @@ public class UsersController {
         return response;
     }
 	
-	@PostMapping("/todos/todos/{idT}/user/")
-    public ResponseEntity crearUser(@Valid @RequestBody Todo todo) {
+	@PostMapping("/todos/{idT}/user/")
+    public ResponseEntity crearUser(@PathVariable String idT, @Valid @RequestBody User user) {
         ResponseEntity response = null;
         try {
-        	todo.set_id(ObjectId.get());
-        	Todo t = this.todosRepository.save(todo);
-        	response = new ResponseEntity(t.get_id(),HttpStatus.CREATED);
+        	Todo todo = this.todosRepository.findById(idT).get();
+        	todo.getUsuarios().add(user);
+        	this.todosRepository.save(todo);
+        	response = new ResponseEntity(HttpStatus.CREATED);
         }
         catch (IllegalArgumentException e)
         {
