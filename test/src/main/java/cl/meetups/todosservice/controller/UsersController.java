@@ -58,8 +58,9 @@ public class UsersController {
         ResponseEntity response = null;
         try {
         	this.todosRepository.findById(idT).get().getUsuarios().remove(idU);
+        	//this.todosRepository.delete(this.todosRepository.findById(idT).get().getUsuarios().get(idU));
         	//this.todosRepository.findById(idT).get().
-        	response = new ResponseEntity(HttpStatus.OK);
+        	response = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         catch (IllegalArgumentException e)
         {
@@ -91,7 +92,7 @@ public class UsersController {
         try {
         	todo.set_id(ObjectId.get());
         	Todo t = this.todosRepository.save(todo);
-        	response = new ResponseEntity(t.get_id(),HttpStatus.OK);
+        	response = new ResponseEntity(t.get_id(),HttpStatus.CREATED);
         }
         catch (IllegalArgumentException e)
         {

@@ -60,7 +60,7 @@ public class TodosController {
         }
         catch (IllegalArgumentException e)
         {
-        	response = ResponseEntity.noContent().build();
+        	response = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
 
         return response;
@@ -88,7 +88,7 @@ public class TodosController {
         try {
         	todo.set_id(ObjectId.get());
         	Todo t = this.todosRepository.save(todo);
-        	response = new ResponseEntity(t.get_id(),HttpStatus.OK);
+        	response = new ResponseEntity(t.get_id(),HttpStatus.CREATED);
         }
         catch (IllegalArgumentException e)
         {
